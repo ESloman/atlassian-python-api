@@ -676,6 +676,49 @@ class Jira(AtlassianRestAPI):
         return self.post(url, data=data)
 
     """
+    Issue Field Configurations
+    Reference: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-field-configurations
+    """
+
+    def get_all_field_configurations(self, query=None, default=None, ids=None, start=0, limit=50):
+        """
+        Gets a paginated list of field configurations.
+        Can be optionally filtered through parameters.
+
+        :param query: the query string to filter names/descriptions. Defaults to None.
+        :param default: whether to return only default field configurations. Defaults to None.
+        :param ids: the list of field configuration ids to filter by. Defaults to None.
+        :param start: the index to start the results from. Defaults to 0.
+        :param limit: the max results to return in each call. Defaults to 0.
+        :return: list of field configurations
+
+        Reference: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-field-configurations/#api-rest-api-2-fieldconfiguration-get
+        """
+        url = self.resource_url("fieldconfiguration")
+
+        params = {}
+        if query:
+            params["query"] = query
+        if default:
+            params["isDefault"] = default
+        if start:
+            params["startAt"] = start
+        if limit:
+            params["maxResults"] = limit
+
+        if ids:
+            # each id needs to be added with '&id='
+            # passing this in via params creates a malformed URL
+            # so build manually and append
+            if not isinstance(ids, list):
+                ids = [ids]
+
+            id_str = "?id=" + "&id=".join([str(i) for i in ids])
+            url += id_str
+
+        return self.get(url, params=params)
+
+    """
     Dashboards
     Reference: https://docs.atlassian.com/software/jira/docs/api/REST/8.5.0/#api/2/dashboard
     """

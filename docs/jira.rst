@@ -367,6 +367,14 @@ Manage issues
     jira.scrap_regex_from_issue(issue_key, regex)
 
 
+Issue Field Configurations
+---------------------------
+
+.. code-block:: python
+
+    # Get the Issue Field Configurations
+    jira.get_all_field_configurations()
+
 Epic Issues
 -------------
 
