@@ -690,6 +690,7 @@ class Jira(AtlassianRestAPI):
         :param ids: the list of field configuration ids to filter by. Defaults to None.
         :param start: the index to start the results from. Defaults to 0.
         :param limit: the max results to return in each call. Defaults to 0.
+
         :return: list of field configurations
 
         Reference: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-field-configurations/#api-rest-api-2-fieldconfiguration-get
@@ -717,6 +718,59 @@ class Jira(AtlassianRestAPI):
             url += id_str
 
         return self.get(url, params=params)
+
+    def create_field_configuration(self, name, description=None):
+        """
+        Creates a field configuration.
+        Field properties are copied from the default field configuration.
+
+        :param name: the name of the new field configuration.
+        :param description: the optional description for the new field configuration. Defaults to None.
+
+        :return: created field configuration response
+
+        Reference: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-field-configurations/#api-rest-api-2-fieldconfiguration-post
+        """
+        url = self.resource_url("fieldconfiguration")
+        data = {"name": name}
+
+        if description is not None:
+            data["description"] = description
+
+        return self.post(url, data=data)
+
+    def update_field_configuration(self, config_id, name, description=None):
+        """
+        Updates a field configuration.
+
+        :param config_id: the ID of the field configuration to update
+        :param name: the name of the field configuration.
+        :param description: the optional description to set for the field configuration. Defaults to None.
+
+        :return:
+
+        Reference: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-field-configurations/#api-rest-api-2-fieldconfiguration-id-put
+        """
+        url = f"{self.resource_url('fieldconfiguration')}/{config_id}"
+        data = {"name": name}
+
+        if description is not None:
+            data["description"] = description
+
+        return self.put(url, data=data)
+
+    def delete_field_configuration(self, config_id):
+        """
+        Deletes a field configuration.
+
+        :param config_id: the ID of the field configuration to delete
+
+        :return:
+
+        Reference: https://developer.atlassian.com/cloud/jira/platform/rest/v2/api-group-issue-field-configurations/#api-rest-api-2-fieldconfiguration-id-delete
+        """
+        url = self.resource_url("fieldconfiguration")
+        return self.delete(url)
 
     """
     Dashboards

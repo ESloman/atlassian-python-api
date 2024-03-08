@@ -367,13 +367,22 @@ Manage issues
     jira.scrap_regex_from_issue(issue_key, regex)
 
 
-Issue Field Configurations
----------------------------
+Manage Issue Field Configurations
+----------------------------------
 
 .. code-block:: python
 
     # Get the Issue Field Configurations
     jira.get_all_field_configurations()
+
+    # Create a new Field Configuration
+    jira.create_field_configuration("New field configuration", "New field configuration description.")
+
+    # Update a Field Configuration
+    jira.update_field_configuration("10001", "New field configuration name.", "A new description.")
+
+    # Delete a Field Configuration
+    jira.delete_field_configuration("10001")
 
 Epic Issues
 -------------
